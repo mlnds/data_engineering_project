@@ -1,9 +1,12 @@
+# Import Required Modules
 import sys
 from collections import defaultdict
 import csv
 from datetime import datetime
 from statistics import median
 
+# Check validity of TRANSACTION_DT format to ensure it is not malformed
+# This module is invoked by parse_input module
 def valid_date(trx_date):
     try:
         datetime.strptime(trx_date, '%m%d%Y')
@@ -12,6 +15,11 @@ def valid_date(trx_date):
     else:
         return True
 
+# Reads input file. This module is invoked by the parse_input module
+# Using 'lazy'(generator) method with yield statement to process input file row by row instead of loading entire file into memory
+# This method would work well for large files.
+# Ensure the fields OTHER_ID, CMTE_ID and TRANSACTION_AMT meet the required criteria
+# Only keep the required fields and filter out the rest
 def read_input(filename, cols, cols_relevant):
     with open(filename) as f:
         for line in f:
@@ -22,6 +30,12 @@ def read_input(filename, cols, cols_relevant):
                     row_filtered = {k:v for k,v in row.items() if k in cols_relevant}
                     yield row_filtered
 
+# This module is called from the main module
+# this module parses each row returned by the read_input module
+# validates the ZIP_CODE field and TRANSACTION_DT fields
+# computes the median amounts, total transactions and total amount of contributions
+# generates these computations by 1) CMTE_ID, ZIP_CODE and 2) by CMTE_ID, TRANSACTION_DT
+# returns these computations to the main module
 def parse_input(filename, cols, cols_relevant, cols_by_zip, cols_by_date):
     total_amt_by_zip = {}
     trx_amt_by_zip = defaultdict(list)
@@ -63,7 +77,10 @@ def parse_input(filename, cols, cols_relevant, cols_by_zip, cols_by_date):
 
     return (aggregated_by_zip_list, aggregated_by_date_dict)
 
-
+# Main Module
+# Defines columns found in the input file and columns needed for the computations
+# Calls parse_input module to perform the needed computations. Passes the input file parameter to this module
+# Creates the output files 'medianvals_by_zip' and 'medianvals_by_date'
 if __name__ == '__main__':
     cols = ['CMTE_ID', 'col2','col3','col4','col5','col6','col7','col8','col9', 'col10', 'ZIP_CODE', 'col12','col13', 'TRANSACTION_DT','TRANSACTION_AMT','OTHER_ID', 'col17', 'col18', 'col19', 'col20', 'col21', 'col22']
     cols_relevant = ['CMTE_ID','ZIP_CODE','TRANSACTION_DT','TRANSACTION_AMT']

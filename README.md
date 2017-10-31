@@ -4,11 +4,11 @@ Requirements
 This coding challenge has been developed in Python 3.4.4 version.
 Python 3.x is required to run this code
 
-The following python modules are required and are imported when running the code:
-sys
-collections
-csv
-datetime
+Python modules that are required and imported during code execution:
+sys,
+collections,
+csv,
+datetime,
 statistics
 
 Source Code and Run Instructions

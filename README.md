@@ -4,6 +4,13 @@ Requirements
 This coding challenge has been developed in Python 3.4.4 version.
 Python 3.x is required to run this code
 
+The following python modules are required and are imported when running the code:
+sys
+collections
+csv
+datetime
+statistics
+
 Source Code and Run Instructions
 --------------------------------
 The source code is in the file 'find_political_donors.py', located in the src folder
